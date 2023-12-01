@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expense_tracking_app/widgets/expenses.dart';
 
-
 void main() {
   runApp(const MainApp());
 }
@@ -11,8 +10,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Expenses(),
+    return MaterialApp(
+      theme: ThemeData(useMaterial3: true),
+      home: const Expenses(),
     );
   }
 }
