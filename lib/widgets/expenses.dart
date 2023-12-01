@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:expense_tracking_app/widgets/new_expense.dart';
 import 'package:expense_tracking_app/widgets/expenses_list/expenses_list.dart';
 import 'package:expense_tracking_app/models/expense.dart';
 
@@ -25,6 +26,13 @@ class _ExpensesState extends State<Expenses> {
     ),
   ];
 
+  void _openExpenseFormOverlay() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => const NewExpense(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +40,7 @@ class _ExpensesState extends State<Expenses> {
         title: const Text('Flutter Expense Traker'),
         actions: [
           IconButton(
-            onPressed: () {}, //formを開く関数を作る
+            onPressed: _openExpenseFormOverlay,
             icon: const Icon(Icons.add),
           ),
         ],
