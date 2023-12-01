@@ -6,7 +6,7 @@ enum Category { food, travel, leisure, work }
 class Expense {
   Expense({
     required this.title,
-    required this.ammount,
+    required this.amount,
     required this.date,
     required this.category,
   }) : id = uuid.v4();
@@ -14,7 +14,7 @@ class Expense {
   //NOTE: idもmodelingできるかもね。
   final String id;
   final String title;
-  final double ammount;
+  final double amount;
   final DateTime date;
   final Category category;
 }
