@@ -32,4 +32,6 @@ class Expense {
   String get formattedDate {
     return formatter.format(date);
   }
+
+//validationの実装
 }

@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:expense_tracking_app/models/expense.dart';
 
-class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+class ExpneseForm extends StatefulWidget {
+  const ExpneseForm({
+    required this.addExpense,
+    super.key,
+  });
+
+  final void Function(Expense expense) addExpense;
 
   @override
-  State<StatefulWidget> createState() => _NewExpenseState();
+  State<StatefulWidget> createState() => _ExpneseFormState();
 }
 
-class _NewExpenseState extends State<NewExpense> {
+class _ExpneseFormState extends State<ExpneseForm> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
@@ -36,14 +41,20 @@ class _NewExpenseState extends State<NewExpense> {
   }
 
   void _submitExpenseData() {
-    if (_validateData()) {
-    //データの送信
-      return;
-    } else {
+    if (!_validateData()) {
       _presentAlert();
+    } else {
+      final Expense newExpense = Expense(
+        title: _titleController.text.trim(),
+        amount: double.tryParse(_amountController.text)!,
+        date: _selectedDate!,
+        category: _selectedCategory,
+      );
+      widget.addExpense(newExpense);
     }
   }
 
+  //TODO: validatorとかmodelの方に移動したい。
   bool _validateData() {
     final enteredAmount = double.tryParse(_amountController.text);
     final isAmountValid = enteredAmount != null && enteredAmount > 0;
