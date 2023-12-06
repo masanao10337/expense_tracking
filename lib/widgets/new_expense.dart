@@ -35,6 +35,42 @@ class _NewExpenseState extends State<NewExpense> {
     super.dispose();
   }
 
+  void _submitExpenseData() {
+    if (_validateData()) {
+    //データの送信
+      return;
+    } else {
+      _presentAlert();
+    }
+  }
+
+  bool _validateData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final isAmountValid = enteredAmount != null && enteredAmount > 0;
+    return _titleController.text.trim().isNotEmpty && isAmountValid ||
+        _selectedDate != null;
+  }
+
+  void _presentAlert() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Invalid input'),
+        content: const Text(
+          'Please make sure a valid title, amount, date and category was entered.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+            },
+            child: const Text('Okay'),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -105,7 +141,7 @@ class _NewExpenseState extends State<NewExpense> {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _submitExpenseData,
                   child: const Text('Save Expnese'),
                 ),
                 const SizedBox(width: 8),
