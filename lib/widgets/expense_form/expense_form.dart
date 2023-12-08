@@ -126,6 +126,7 @@ class _ExpneseFormState extends State<ExpneseForm> {
               ),
             ],
           ),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.only(bottom: 5),
             child: Row(
