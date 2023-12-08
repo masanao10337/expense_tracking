@@ -44,13 +44,15 @@ class _ExpneseFormState extends State<ExpneseForm> {
     if (!_validateData()) {
       _presentAlert();
     } else {
-      final Expense newExpense = Expense(
-        title: _titleController.text.trim(),
-        amount: double.tryParse(_amountController.text)!,
-        date: _selectedDate!,
-        category: _selectedCategory,
+      widget.addExpense(
+        Expense(
+          title: _titleController.text.trim(),
+          amount: double.tryParse(_amountController.text)!,
+          date: _selectedDate!,
+          category: _selectedCategory,
+        ),
       );
-      widget.addExpense(newExpense);
+      Navigator.pop(context);
     }
   }
 
@@ -58,7 +60,8 @@ class _ExpneseFormState extends State<ExpneseForm> {
   bool _validateData() {
     final enteredAmount = double.tryParse(_amountController.text);
     final isAmountValid = enteredAmount != null && enteredAmount > 0;
-    return _titleController.text.trim().isNotEmpty && isAmountValid ||
+    return _titleController.text.trim().isNotEmpty &&
+        isAmountValid &&
         _selectedDate != null;
   }
 
@@ -85,7 +88,7 @@ class _ExpneseFormState extends State<ExpneseForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
         children: [
           TextField(
@@ -123,13 +126,13 @@ class _ExpneseFormState extends State<ExpneseForm> {
               ),
             ],
           ),
-          const Spacer(),
           Padding(
             padding: const EdgeInsets.only(bottom: 5),
             child: Row(
               children: [
                 const SizedBox(width: 5),
                 DropdownButton(
+                  borderRadius: BorderRadius.circular(12),
                   value: _selectedCategory,
                   items: Category.values
                       .map(

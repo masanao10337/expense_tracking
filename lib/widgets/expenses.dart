@@ -28,6 +28,7 @@ class _ExpensesState extends State<Expenses> {
 
   void _openExpenseFormOverlay() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (ctx) => ExpneseForm(addExpense: _addExpense),
     );
@@ -37,8 +38,38 @@ class _ExpensesState extends State<Expenses> {
     setState(() => _registredExpenses.add(expense));
   }
 
+  void _removeExpense(Expense expense) {
+    final int currentIndex = _registredExpenses.indexOf(expense);
+    setState(() {
+      _registredExpenses.remove(expense);
+
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: const Duration(seconds: 2),
+          content: const Text('Expense deleted.'),
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () => setState(
+              () => _registredExpenses.insert(currentIndex, expense),
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = _registredExpenses.isEmpty
+        ? const Center(
+            child: Text('No expneses. Start adding some!'),
+          )
+        : ExpensesList(
+            expenses: _registredExpenses,
+            removeExpense: _removeExpense,
+          );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Flutter Expense Traker'),
@@ -52,9 +83,7 @@ class _ExpensesState extends State<Expenses> {
       body: Column(
         children: [
           const Text('The Chart'),
-          Expanded(
-            child: ExpensesList(expenses: _registredExpenses),
-          )
+          Expanded(child: mainContent),
         ],
       ),
     );
